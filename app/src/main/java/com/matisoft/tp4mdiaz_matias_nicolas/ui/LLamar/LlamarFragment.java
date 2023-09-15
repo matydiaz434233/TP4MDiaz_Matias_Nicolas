@@ -3,7 +3,9 @@ package com.matisoft.tp4mdiaz_matias_nicolas.ui.LLamar;
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,8 +28,6 @@ public class LlamarFragment extends Fragment {
     private FragmentLlamarBinding binding;
     private LlamarViewModel vm;
 
-    private static final int REQUEST_CALL_PHONE_PERMISSION = 1;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,26 +38,13 @@ public class LlamarFragment extends Fragment {
         binding.btLlamar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Antes de realizar la llamada, verifica si tienes el permiso CALL_PHONE
-                if (chequeaPermiso(Manifest.permission.CALL_PHONE, REQUEST_CALL_PHONE_PERMISSION)) {
-                    // Tienes permiso, puedes realizar la acción aquí
-                    startActivity(vm.telefono(binding.idNumero.getText().toString()));
-                }
+                String numeroFinal = binding.idNumero.getText().toString();
+                vm.telefono(numeroFinal);
             }
         });
-
         return root;
     }
 
-    // Método para verificar si tienes permiso
-    private boolean chequeaPermiso(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-            // Si el permiso no ha sido concedido, solicítalo
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{permission}, requestCode);
-            return false;
-        }
-        return true;
-    }
 
 
     @Override
